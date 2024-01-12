@@ -1,44 +1,78 @@
-//Creamos un objeto   Video 3 min 5:56
-const juan = {
-    name: "Juanito",
-    age: 18,
-    approvedCourses: ["Curso 1"],
-    addCourse(newCourse){
-        this.approvedCourses.push(newCourse);
+/* 
+const obj1 = {
+    a: "a",
+    b: "b",
+    c: {d: "d",
+        e: "e",
+    },
+    editA(){
+        this.a = "AAAAAA"
     }
 };
+//convertir a string el obj1
+const stringifiedComplexObj = JSON.stringify(obj1);
 
-//usaremos las propiedades estaticas del prototipo madre Object
+//Crea un objeto a partir de un string 
+const obj2 = JSON.parse(stringifiedComplexObj); 
 
-//Muestra en un array solo los nombres de las keys del objeto
-//console.log(Object.keys(juan));
-
-//Muestra en un array solo los nombres de las keys del objeto, muestra todas aunque su propiedad enumerable este en false
-//console.log(Object.getOwnPropertyNames(juan));
-
-//muestra en un array de arrays los atributos y valores de un objeto
-//console.log(Object.entries(juan));
-
-//muestra en un objeto de objetos los atributos y valores de un objeto
+*/
 
 
-//Para asignar una nueva propiedad
-//Recibe 3 argumentos = objeto + nombreNuevaPropiedad + objeto con atributos
-
-/* Object.defineProperty(juan, "navigator", {
-    value: "Chrome", 
-    enumerable: false, //permite o evita que se visualize
-    writable: true, //permite o evita que se edite   
-    configurable: true //permite o evita que lo borren
-}); */
-
-//NUEVOS METODOS del superprototipo Object Freeze  y Seal
-
-//pone CONFIGURABLE en false en cada propiedad del objeto  
-//Object.seal(juan);
-
-//pone CONFIGURABLE y WRITABLE en false en cada propiedad del objeto 
-Object.freeze(juan);
+//Ciclo rrecorrer cada una de las propiedades y guardarlas en el obj1
+/* 
+const obj2 = {};
+for (prop in obj1) {
+    obj2[prop] = obj1[prop];
+} 
+*/
 
 
-console.log(Object.getOwnPropertyDescriptors(juan));
+//copiar un objeto con Shallow   assign y create
+/* 
+const obj2 = {};
+const obj3 = Object.assign({}, obj1); //Solo indicamos el objeto y asigna las propiedades del objeto.
+const obj4 = Object.create(obj1); //Solo indicamos el objeto y el lo va a crear
+ */
+
+//metodo estatico del prototipo Json que nos permite convertir objetos en un string cada propiedad y valor 
+
+
+
+//RECURSIVIDAD
+
+//EstructuraValidación
+// function recursiva() {
+//     if(/* validacion*/){
+//         //llamados recursivos
+//     } else {
+//         //llamados normales, sin recursividad
+//     }
+// }
+
+//Ejemplo de recursividad manual
+const numeritos = [0,1,2,3,4,5,6,7,8,9,435678,7,2,3];
+/* 
+let numerito = 0;
+for(let index = 0; index < numeritos.length; index++){
+    numerito = numeritos[index];
+    console.log({index, numerito});
+} 
+*/
+
+//Ejemplo de recursividad 
+function recursiva (numbersArray){
+    if (numbersArray.length != 0) {
+        const firstNum = numbersArray[0]; //indicar que es la 1ra posicion
+        console.log(firstNum);
+        numbersArray.shift(); //eliminar el 1er elemento
+        return recursiva(numbersArray); //enviamos el array de numeros sin el numero que le quitamos
+    }else{
+
+    }
+}
+
+/*  [“✌”,“😂”,“😝”,“😁”,“😱”,“👉”,“🙌”,“🍻”,“🔥”,“🌈”,“☀”,“🎈”,“🌹”,“💄”,“🎀”,“⚽”,“🎾”,“🏁”,“😡”,
+“👿”,“🐻”,“🐶”,“🐬”,“🐟”,“🍀”,“👀”,“🚗”,“🍎”,“💝”,“💙”,“👌”,“❤”,“😍”,“😉”,“😓”,“😳”,“💪”,“💩”,
+“🍸”,“🔑”,“💖”,“🌟”,“🎉”,“🌺”,“🎶”,“👠”,“🏈”,“⚾”,“🏆”,“👽”,“💀”,“🐵”,“🐮”,“🐩”,“🐎”,“💣”,“👃”,
+“👂”,“🍓”,“💘”,“💜”,“👊”,“💋”,“😘”,“😜”,“😵”,“🙏”,“👋”,“🚽”,“💃”,“💎”,“🚀”,“🌙”,“🎁”,“⛄”,“🌊”,“⛵”,
+“🏀”,“🎱”,“💰”,“👶”,“👸”,“🐰”,“🐷”,“🐍”,“🐫”,“🔫”,“👄”,“🚲”,“🍉”,“💛”,“💚”] */
