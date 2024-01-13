@@ -1,4 +1,3 @@
-/* 
 const obj1 = {
     a: "a",
     b: "b",
@@ -9,6 +8,9 @@ const obj1 = {
         this.a = "AAAAAA"
     }
 };
+
+/* 
+
 //convertir a string el obj1
 const stringifiedComplexObj = JSON.stringify(obj1);
 
@@ -50,8 +52,10 @@ const obj4 = Object.create(obj1); //Solo indicamos el objeto y el lo va a crear
 // }
 
 //Ejemplo de recursividad manual
-const numeritos = [0,1,2,3,4,5,6,7,8,9,435678,7,2,3];
+
+//const numeritos = [0,1,2,3,4,5,6,7,8,9,435678,7,2,3];
 /* 
+//Obtener los numeros con un for
 let numerito = 0;
 for(let index = 0; index < numeritos.length; index++){
     numerito = numeritos[index];
@@ -71,6 +75,59 @@ function recursiva (numbersArray){
     }
 }
 
+//funcion validar si es un objeto o un array
+function isObject (subject){
+    return typeof subject == "object"; //true si es objeto
+}
+
+function isArray(subject){
+    return Array.isArray(subject); //true si es array
+}
+
+//Recibe el objeto que copiar
+function deepCopy(subject) {
+    let copySubject; //inicializaar
+
+    //validamos
+    const subjectIsObject = isObject(subject);
+    const subjectIsArray = isArray(subject);
+
+    //Asignar segun el tipo
+    if (subjectIsArray){
+        copySubject = [];
+    } else if (subjectIsObject){
+        copySubject = {};
+    }else {
+        return subject;
+    }
+
+    //for
+    
+    for(key in subject){
+        //Validar si cada propiedad es un objeto o array
+        const keyIsObject = isObject(subject[key]);
+         
+        if(keyIsObject){ //Si es un objeto
+            copySubject[key] = deepCopy(subject[key]); //aplicamos recursividad
+        }else{
+            
+            if(subjectIsArray){ //Si es un array el objeto principal agregaremos cada propiedad que vamos leyendo
+                copySubject.push(subject[key]);
+            }else{
+                copySubject[key] = subject[key] //la propiedad sera igual a la original
+            }
+            
+
+        }
+    }
+
+    return copySubject; //devolver
+}
+
+
+
+
+//Emoticones
 /*  [“✌”,“😂”,“😝”,“😁”,“😱”,“👉”,“🙌”,“🍻”,“🔥”,“🌈”,“☀”,“🎈”,“🌹”,“💄”,“🎀”,“⚽”,“🎾”,“🏁”,“😡”,
 “👿”,“🐻”,“🐶”,“🐬”,“🐟”,“🍀”,“👀”,“🚗”,“🍎”,“💝”,“💙”,“👌”,“❤”,“😍”,“😉”,“😓”,“😳”,“💪”,“💩”,
 “🍸”,“🔑”,“💖”,“🌟”,“🎉”,“🌺”,“🎶”,“👠”,“🏈”,“⚾”,“🏆”,“👽”,“💀”,“🐵”,“🐮”,“🐩”,“🐎”,“💣”,“👃”,
