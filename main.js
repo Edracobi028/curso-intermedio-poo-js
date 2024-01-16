@@ -85,7 +85,7 @@ function isArray(subject){
 }
 
 //Recibe el objeto que copiar
-function deepCopy(subject) {
+/* function deepCopy(subject) {
     let copySubject; //inicializaar
 
     //validamos
@@ -116,13 +116,49 @@ function deepCopy(subject) {
             }else{
                 copySubject[key] = subject[key] //la propiedad sera igual a la original
             }
-            
-
         }
     }
 
     return copySubject; //devolver
+} */
+
+
+
+//Playgrounds: Hacer freeze de un objeto de forma recursiva
+
+function deepFreeze(subject){
+   
+    if (typeof subject !== 'object' ){
+        return subject;
+    }
+    Object.freeze(subject);
+
+    for(key in subject){//Validar si cada propiedad es un objeto o array
+       deepFreeze(subject[key]); //aplicamos recursividad
+    }
+
+
+    //Object.freeze(copySubject); //freeze al objeto
+
+    return subject;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
