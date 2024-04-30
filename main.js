@@ -1,10 +1,11 @@
 const obj1 = {
     a: "a",
     b: "b",
-    c: {d: "d",
+    c: {
+        d: "d",
         e: "e",
     },
-    editA(){
+    editA() {
         this.a = "AAAAAA"
     }
 };
@@ -64,23 +65,23 @@ for(let index = 0; index < numeritos.length; index++){
 */
 
 //Ejemplo de recursividad 
-function recursiva (numbersArray){
+function recursiva(numbersArray) {
     if (numbersArray.length != 0) {
         const firstNum = numbersArray[0]; //indicar que es la 1ra posicion
         console.log(firstNum);
         numbersArray.shift(); //eliminar el 1er elemento
         return recursiva(numbersArray); //enviamos el array de numeros sin el numero que le quitamos
-    }else{
+    } else {
 
     }
 }
 
 //funcion validar si es un objeto o un array
-function isObject (subject){
+function isObject(subject) {
     return typeof subject == "object"; //true si es objeto
 }
 
-function isArray(subject){
+function isArray(subject) {
     return Array.isArray(subject); //true si es array
 }
 
@@ -126,15 +127,15 @@ function isArray(subject){
 
 //Playgrounds: Hacer freeze de un objeto de forma recursiva
 
-function deepFreeze(subject){
-   
-    if (typeof subject !== 'object' ){
+function deepFreeze(subject) {
+
+    if (typeof subject !== 'object') {
         return subject;
     }
     Object.freeze(subject);
 
-    for(key in subject){//Validar si cada propiedad es un objeto o array
-       deepFreeze(subject[key]); //aplicamos recursividad
+    for (key in subject) {//Validar si cada propiedad es un objeto o array
+        deepFreeze(subject[key]); //aplicamos recursividad
     }
 
 
@@ -142,6 +143,44 @@ function deepFreeze(subject){
 
     return subject;
 }
+
+
+
+//FACTORY PATTERNS O RORO (PATRONES PARA CREAR OBJETOS CON FUNCIONES)
+
+//Funcion para tirar un error al validar si contiene los parametros obligatorios
+function requiredParam(param) {
+    throw new Error(param + " es obligatorio");
+}
+
+//Crear una funcion para crear estudiantes que devuelva un objeto
+//Definir las propiedades que espero recibir en un objeto
+function createStudent({
+    name = requiredParam("name"),//por default tirar el error
+    email = requiredParam("email"),
+    age,
+    twitter,
+    instagram,
+    facebook,
+    approvedCourses = [],
+    learningPaths = [],
+} = {}) {
+    return { //colocar propiedades que recibimos, (colocar (:) solo si cambiamos algo)
+        name,
+        age,
+        email,
+        socialMedia: {
+            twitter,
+            instagram,
+            facebook,
+        },
+        approvedCourses,
+        learningPaths,
+    };
+};
+
+const juan = createStudent({ name: "juanito", email: "erazo@gmail.com" });
+
 
 
 
