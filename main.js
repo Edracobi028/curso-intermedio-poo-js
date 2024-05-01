@@ -1,14 +1,4 @@
-const obj1 = {
-    a: "a",
-    b: "b",
-    c: {
-        d: "d",
-        e: "e",
-    },
-    editA() {
-        this.a = "AAAAAA"
-    }
-};
+
 
 /* 
 
@@ -86,7 +76,7 @@ function isArray(subject) {
 }
 
 //Recibe el objeto que copiar
-/* function deepCopy(subject) {
+function deepCopy(subject) {
     let copySubject; //inicializaar
 
     //validamos
@@ -94,39 +84,39 @@ function isArray(subject) {
     const subjectIsArray = isArray(subject);
 
     //Asignar segun el tipo
-    if (subjectIsArray){
+    if (subjectIsArray) {
         copySubject = [];
-    } else if (subjectIsObject){
+    } else if (subjectIsObject) {
         copySubject = {};
-    }else {
+    } else {
         return subject;
     }
 
     //for
-    
-    for(key in subject){
+
+    for (key in subject) {
         //Validar si cada propiedad es un objeto o array
         const keyIsObject = isObject(subject[key]);
-         
-        if(keyIsObject){ //Si es un objeto
+
+        if (keyIsObject) { //Si es un objeto
             copySubject[key] = deepCopy(subject[key]); //aplicamos recursividad
-        }else{
-            
-            if(subjectIsArray){ //Si es un array el objeto principal agregaremos cada propiedad que vamos leyendo
+        } else {
+
+            if (subjectIsArray) { //Si es un array el objeto principal agregaremos cada propiedad que vamos leyendo
                 copySubject.push(subject[key]);
-            }else{
+            } else {
                 copySubject[key] = subject[key] //la propiedad sera igual a la original
             }
         }
     }
 
     return copySubject; //devolver
-} */
+}
 
 
 
 //Playgrounds: Hacer freeze de un objeto de forma recursiva
-
+/*
 function deepFreeze(subject) {
 
     if (typeof subject !== 'object') {
@@ -143,7 +133,7 @@ function deepFreeze(subject) {
 
     return subject;
 }
-
+*/
 
 
 //FACTORY PATTERNS O RORO (PATRONES PARA CREAR OBJETOS CON FUNCIONES)
@@ -179,8 +169,40 @@ function createStudent({
     };
 };
 
+/*
 const juan = createStudent({ name: "juanito", email: "erazo@gmail.com" });
+*/
 
+//Clase estudiante base sin prototipos aplicando abstraccion
+
+//todas las props que tendra el estudiante
+const studentBase = {
+    name: undefined,
+    email: undefined,
+    age: undefined,
+    approvedCourses: undefined,
+    learningPaths: undefined,
+    socialMedia: {
+        twitter: undefined,
+        instagram: undefined,
+        facebook: undefined,
+    },
+};
+
+//crear una constante por cada estudiante usando la funcion deep-copy pasandole el objeto estudent-base
+
+const juan = deepCopy(studentBase);
+
+//Editar con las propiedades y evitar se puedan eliminar en el futuro con la funcion defineProperty
+/*
+Object.defineProperty(juan, "name", {
+    value: "Juanito",
+    configurable: false, //evitar la puedan eliminar
+});
+*/
+
+//Editar con las propiedades y evitar se puedan eliminar en el futuro la funcion seal()
+Object.seal(juan);
 
 
 
