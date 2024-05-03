@@ -171,27 +171,39 @@ function createStudent({
             instagram,
             facebook,
         },
-        readName() {
+        //Usar get y set sustituyen writable(set) y value(get), un atajo para entar con validaciones/protecciones a la propiedad privada name
+        get name() {
             return private["_name"];
         },
-        changeName(newName) {
-            private["_name"] = newName;
+
+        set name(newName) {
+            //validar que no este vacio
+            if (newName.length != 0) {
+                private["_name"] = newName; //editamos con el nombre que recibimos
+            } else {
+                console.warn("Tu nombre debe tener al menso 1 caracter");
+            }
         },
+
+        // readName() {
+        //     return private["_name"];
+        // },
+        // changeName(newName) {
+        //     private["_name"] = newName;
+        // },
     };
 
     //evitar que puedas editar las funciones publicas de readName y changeName
     //pasamos en parametros: el objeto, la propiedad y los atributos
-    Object.defineProperty(public, "readName", {
-        configurable: false, //evitamos lo borren
-        writable: false,     //evitar editar la funcion 
-    });
+    // Object.defineProperty(public, "readName", {
+    //     configurable: false, //evitamos lo borren
+    //     writable: false,     //evitar editar la funcion 
+    // });
 
-    Object.defineProperty(public, "changeName", {
-        configurable: false,
-        writable: false,
-    });
-
-
+    // Object.defineProperty(public, "changeName", {
+    //     configurable: false,
+    //     writable: false,
+    // });
 
     return public;
 };
