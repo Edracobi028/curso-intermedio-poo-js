@@ -155,27 +155,55 @@ function createStudent({
     approvedCourses = [],
     learningPaths = [],
 } = {}) {
-    return { //colocar propiedades que recibimos, (colocar (:) solo si cambiamos algo)
-        name,
-        age,
+
+    //objeto para guardar las props que no se deban cambiar directamente desde el objeto
+    const private = {
+        "_name": name,
+    };
+
+    const public = {
         email,
+        age,
+        approvedCourses,
+        learningPaths,
         socialMedia: {
             twitter,
             instagram,
             facebook,
         },
-        approvedCourses,
-        learningPaths,
+        readName() {
+            return private["_name"];
+        },
+        changeName(newName) {
+            private["_name"] = newName;
+        },
     };
+
+    //evitar que puedas editar las funciones publicas de readName y changeName
+    //pasamos en parametros: el objeto, la propiedad y los atributos
+    Object.defineProperty(public, "readName", {
+        configurable: false, //evitamos lo borren
+        writable: false,     //evitar editar la funcion 
+    });
+
+    Object.defineProperty(public, "changeName", {
+        configurable: false,
+        writable: false,
+    });
+
+
+
+    return public;
 };
 
-/*
-const juan = createStudent({ name: "juanito", email: "erazo@gmail.com" });
-*/
 
+const juan = createStudent({ name: "juanito", email: "erazo@gmail.com" });
+
+//13-20 min 6:22
 //Clase estudiante base sin prototipos aplicando abstraccion
 
 //todas las props que tendra el estudiante
+/*
 const studentBase = {
     name: undefined,
     email: undefined,
@@ -188,11 +216,12 @@ const studentBase = {
         facebook: undefined,
     },
 };
+*/
 
 //crear una constante por cada estudiante usando la funcion deep-copy pasandole el objeto estudent-base
-
+/*
 const juan = deepCopy(studentBase);
-
+*/
 //Editar con las propiedades y evitar se puedan eliminar en el futuro con la funcion defineProperty
 /*
 Object.defineProperty(juan, "name", {
@@ -202,8 +231,9 @@ Object.defineProperty(juan, "name", {
 */
 
 //Editar con las propiedades y evitar se puedan eliminar en el futuro la funcion seal()
+/*
 Object.seal(juan);
-
+*/
 
 
 
