@@ -143,6 +143,43 @@ function requiredParam(param) {
     throw new Error(param + " es obligatorio");
 }
 
+//Crear una funcion para crear learning paths utilizando RORO  (Receive One, Return One)
+//Recibiendo como parametro un objeto con las propiedades que necesitamos, con objeto privado y publico
+//retornando solo el objeto publico
+function createLearningPath({
+    name = requiredParam("name"),
+    courses = [],
+
+}) {
+    const private = { //para no editar directamente utilizando getter y setters
+        "_name": name,
+        "_courses": courses,
+    };
+
+    const public = {
+        get name() {
+            return private["_name"];
+        },
+
+        set name(newName) {
+            //validar que no este vacio
+            if (newName.length != 0) {
+                private["_name"] = newName; //editamos con el nombre que recibimos
+            } else {
+                console.warn("Tu nombre debe tener al menso 1 caracter");
+            }
+        },
+        get courses() {
+            return private["_courses"];
+        },
+
+
+
+    };
+
+    return public;
+};
+
 //Crear una funcion para crear estudiantes que devuelva un objeto
 //Definir las propiedades que espero recibir en un objeto
 function createStudent({
@@ -159,13 +196,14 @@ function createStudent({
     //objeto para guardar las props que no se deban cambiar directamente desde el objeto
     const private = {
         "_name": name,
+        "_learningPaths": learningPaths,
+
     };
 
     const public = {
         email,
         age,
         approvedCourses,
-        learningPaths,
         socialMedia: {
             twitter,
             instagram,
@@ -183,6 +221,34 @@ function createStudent({
             } else {
                 console.warn("Tu nombre debe tener al menso 1 caracter");
             }
+        },
+
+        get learningPaths() {
+            return private["_learningPaths"];
+        },
+
+        set learningPaths(newLP) {
+
+            if (!newLP.name) {//validar si no tiene un nombre y aventar una alerta
+                console.warn("Tu LP no tiene la propiedad name");
+                return; //impedir se siga ejecutando el codigo
+            }
+
+
+            if (!newLP.courses) { //validar si no es un array
+                console.warn("Tu LP no tiene cursos");
+                return;
+            }
+
+
+            if (!isArray(newLP.courses)) { //validar si no es un array
+                console.warn("Tu LP no es una lista (de cursos)");
+                return;
+            }
+
+            private["_learningPaths"].push(newLP); //añadir nueva ruta
+
+
         },
 
         // readName() {
@@ -211,24 +277,12 @@ function createStudent({
 
 const juan = createStudent({ name: "juanito", email: "erazo@gmail.com" });
 
-//13-20 min 6:22
+
+
+//16-20 min 0:00
 //Clase estudiante base sin prototipos aplicando abstraccion
 
-//todas las props que tendra el estudiante
-/*
-const studentBase = {
-    name: undefined,
-    email: undefined,
-    age: undefined,
-    approvedCourses: undefined,
-    learningPaths: undefined,
-    socialMedia: {
-        twitter: undefined,
-        instagram: undefined,
-        facebook: undefined,
-    },
-};
-*/
+
 
 //crear una constante por cada estudiante usando la funcion deep-copy pasandole el objeto estudent-base
 /*
