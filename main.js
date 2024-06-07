@@ -1,5 +1,4 @@
 
-
 /* 
 
 //convertir a string el obj1
@@ -146,43 +145,49 @@ function requiredParam(param) {
 //Crear una funcion para crear learning paths utilizando RORO  (Receive One, Return One)
 //Recibiendo como parametro un objeto con las propiedades que necesitamos, con objeto privado y publico
 //retornando solo el objeto publico
-function createLearningPath({
+function LearningPath({
     name = requiredParam("name"),
     courses = [],
 
 }) {
-    const private = { //para no editar directamente utilizando getter y setters
-        "_name": name,
-        "_courses": courses,
-    };
 
-    const public = {
-        get name() {
-            return private["_name"];
-        },
-
-        set name(newName) {
-            //validar que no este vacio
-            if (newName.length != 0) {
-                private["_name"] = newName; //editamos con el nombre que recibimos
-            } else {
-                console.warn("Tu nombre debe tener al menso 1 caracter");
-            }
-        },
-        get courses() {
-            return private["_courses"];
-        },
+    //guardar cada una de las propiedades
+    this.name = name;
+    this.courses = courses;
 
 
+    //const private = { //para no editar directamente utilizando getter y setters
+    //    "_name": name,
+    //    "_courses": courses,
+    //};
 
-    };
+    // const public = {
+    //     get name() {
+    //         return private["_name"];
+    //     },
 
-    return public;
+    //     set name(newName) {
+    //         //validar que no este vacio
+    //         if (newName.length != 0) {
+    //             private["_name"] = newName; //editamos con el nombre que recibimos
+    //         } else {
+    //             console.warn("Tu nombre debe tener al menso 1 caracter");
+    //         }
+    //     },
+    //     get courses() {
+    //         return private["_courses"];
+    //     },
+
+
+
+    // };
+
+    // return public;
 };
 
 //Crear una funcion para crear estudiantes que devuelva un objeto
 //Definir las propiedades que espero recibir en un objeto
-function createStudent({
+function Student({
     name = requiredParam("name"),//por default tirar el error
     email = requiredParam("email"),
     age,
@@ -193,116 +198,68 @@ function createStudent({
     learningPaths = [],
 } = {}) {
 
-    //objeto para guardar las props que no se deban cambiar directamente desde el objeto
-    const private = {
-        "_name": name,
-        "_learningPaths": learningPaths,
 
+    //video 17/20 13:25
+    this.name = name;
+    this.email = email;
+    this.age = age;
+    this.approvedCourses = approvedCourses;
+    this.socialMedia = {
+        twitter,
+        instagram,
+        facebook,
     };
 
-    const public = {
-        email,
-        age,
-        approvedCourses,
-        socialMedia: {
-            twitter,
-            instagram,
-            facebook,
-        },
-        //Usar get y set sustituyen writable(set) y value(get), un atajo para entar con validaciones/protecciones a la propiedad privada name
-        get name() {
-            return private["_name"];
-        },
+    //definir una constante de tipo objeto privada para guardar una propiedad o info a proteger
 
-        set name(newName) {
-            //validar que no este vacio
-            if (newName.length != 0) {
-                private["_name"] = newName; //editamos con el nombre que recibimos
+    const private = { //guardamos dentro una propiedad vacia
+        "_learningPaths": [],
+    }
+
+    //Creamos un nuevo atributo llamado learningPaths dentro de this
+    //crear setters y getter para evitar que lo manipulen
+    //para ello tendremos que utilzar de nuevo Object definedProperty
+
+    Object.defineProperty(this, "learningPaths", { //le pasamos el prototipo y la propiedad y objeto con las propiedades
+        get() {
+            return private["_learningPaths"];//Devolver del objeto privado la propiedad que le creamos
+        },
+        set(newLp) { //validar si son realmente learningPaths
+
+            if (newLp instanceof LearningPath) { //entrar a la posicion dentro del array "learningPaths"
+                private["_learningPaths"].push(newLp); //agregarlo a la privada
             } else {
-                console.warn("Tu nombre debe tener al menso 1 caracter");
+                console.warn("Alguno de los LPs no es una instancia del prototipo LearningPath");
             }
         },
 
-        get learningPaths() {
-            return private["_learningPaths"];
-        },
+    });
 
-        set learningPaths(newLP) {
+    //iterar por cada uno de los LP llamar al set y agregar el nuevo LP
+    for (learningPathIndex in learningPaths) { //agregar uno a uno los learning paths y enviar a set
+        this.learningPaths = learningPaths[learningPathIndex];
+    }
 
-            if (!newLP.name) {//validar si no tiene un nombre y aventar una alerta
-                console.warn("Tu LP no tiene la propiedad name");
-                return; //impedir se siga ejecutando el codigo
-            }
-
-
-            if (!newLP.courses) { //validar si no es un array
-                console.warn("Tu LP no tiene cursos");
-                return;
-            }
-
-
-            if (!isArray(newLP.courses)) { //validar si no es un array
-                console.warn("Tu LP no es una lista (de cursos)");
-                return;
-            }
-
-            private["_learningPaths"].push(newLP); //añadir nueva ruta
-
-
-        },
-
-        // readName() {
-        //     return private["_name"];
-        // },
-        // changeName(newName) {
-        //     private["_name"] = newName;
-        // },
-    };
-
-    //evitar que puedas editar las funciones publicas de readName y changeName
-    //pasamos en parametros: el objeto, la propiedad y los atributos
-    // Object.defineProperty(public, "readName", {
-    //     configurable: false, //evitamos lo borren
-    //     writable: false,     //evitar editar la funcion 
-    // });
-
-    // Object.defineProperty(public, "changeName", {
-    //     configurable: false,
-    //     writable: false,
-    // });
-
-    return public;
 };
 
 
-const juan = createStudent({ name: "juanito", email: "erazo@gmail.com" });
+
+const escuelaWeb = new LearningPath({ name: "Escuela de WebDev" });
+const escuelaData = new LearningPath({ name: "Escuela de Data Science" });
+const juan = new Student({
+    name: "juanito",
+    email: "erazo@gmail.com",
+    learningPaths: [
+        escuelaWeb,
+        escuelaData,
+
+    ],
+}); //cambiar la forma en que se crea el estudiante
 
 
 
-//16-20 min 0:00
-//Clase estudiante base sin prototipos aplicando abstraccion
 
-
-
-//crear una constante por cada estudiante usando la funcion deep-copy pasandole el objeto estudent-base
-/*
-const juan = deepCopy(studentBase);
-*/
-//Editar con las propiedades y evitar se puedan eliminar en el futuro con la funcion defineProperty
-/*
-Object.defineProperty(juan, "name", {
-    value: "Juanito",
-    configurable: false, //evitar la puedan eliminar
-});
-*/
-
-//Editar con las propiedades y evitar se puedan eliminar en el futuro la funcion seal()
-/*
-Object.seal(juan);
-*/
-
-
-
+// video 18/20 10:29
 
 
 
