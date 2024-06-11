@@ -113,6 +113,54 @@ function deepCopy(subject) {
 }
 
 
+//Crear metodos estaticos desde un prototipo
+function SuperObject() { }
+
+SuperObject.isObject = function (subject) {
+    return typeof subject == "object"; //true si es objeto
+}
+
+// Llamar a Super object y directamente el metodo estatico que queremos crear
+// no estamos guardando esa func dentro de nuestro prototype sino directamente en superobject
+// aqui pondremos los metodos que consideremos relevantes en el dia a dia
+SuperObject.deepCopy = function (subject) {
+
+    let copySubject; //inicializaar
+
+    //validamos
+    const subjectIsObject = isObject(subject);
+    const subjectIsArray = isArray(subject);
+
+    //Asignar segun el tipo
+    if (subjectIsArray) {
+        copySubject = [];
+    } else if (subjectIsObject) {
+        copySubject = {};
+    } else {
+        return subject;
+    }
+
+    //for
+
+    for (key in subject) {
+        //Validar si cada propiedad es un objeto o array
+        const keyIsObject = isObject(subject[key]);
+
+        if (keyIsObject) { //Si es un objeto
+            copySubject[key] = deepCopy(subject[key]); //aplicamos recursividad
+        } else {
+
+            if (subjectIsArray) { //Si es un array el objeto principal agregaremos cada propiedad que vamos leyendo
+                copySubject.push(subject[key]);
+            } else {
+                copySubject[key] = subject[key] //la propiedad sera igual a la original
+            }
+        }
+    }
+
+    return copySubject; //devolver
+}
+
 
 //Playgrounds: Hacer freeze de un objeto de forma recursiva
 /*
@@ -149,40 +197,9 @@ function LearningPath({
     name = requiredParam("name"),
     courses = [],
 
-}) {
-
-    //guardar cada una de las propiedades
+}) { //guardar cada una de las propiedades
     this.name = name;
     this.courses = courses;
-
-
-    //const private = { //para no editar directamente utilizando getter y setters
-    //    "_name": name,
-    //    "_courses": courses,
-    //};
-
-    // const public = {
-    //     get name() {
-    //         return private["_name"];
-    //     },
-
-    //     set name(newName) {
-    //         //validar que no este vacio
-    //         if (newName.length != 0) {
-    //             private["_name"] = newName; //editamos con el nombre que recibimos
-    //         } else {
-    //             console.warn("Tu nombre debe tener al menso 1 caracter");
-    //         }
-    //     },
-    //     get courses() {
-    //         return private["_courses"];
-    //     },
-
-
-
-    // };
-
-    // return public;
 };
 
 //Crear una funcion para crear estudiantes que devuelva un objeto
@@ -242,8 +259,6 @@ function Student({
 
 };
 
-
-
 const escuelaWeb = new LearningPath({ name: "Escuela de WebDev" });
 const escuelaData = new LearningPath({ name: "Escuela de Data Science" });
 const juan = new Student({
@@ -252,7 +267,6 @@ const juan = new Student({
     learningPaths: [
         escuelaWeb,
         escuelaData,
-
     ],
 }); //cambiar la forma en que se crea el estudiante
 
